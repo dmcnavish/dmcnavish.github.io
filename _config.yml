@@ -3,9 +3,9 @@ description: My Personal Stack Problems
 author: Dave McNavish
 github: https://github.com/dmcnavish
 about: I am a software developer that loves to search out new challenges and tackle them head on.
-disqus_shortname: Structured Software Jargon
+disqus_shortname: dmcnavish
 google_analytics: UA-XXXXXXXX-Y
-avatar_url: /static/img/avatar.jpg
+avatar_url: https://avatars1.githubusercontent.com/u/3458331?v=4&s=400
 
 enableTags: true
 tagarray: []
