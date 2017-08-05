@@ -1,0 +1,15 @@
+---
+layout: post
+title: Day 1
+tags: [info]
+---
+
+Welcome to the first of what will soon be many, blog posts.
+ 
+My goal is to create a software development blog that allows me to learn and share topics in greater detail which will lead me to become a better developer. I plan on covering topics that include frontend/backend development, design, devlops, scripting, and everything in between.
+
+Hopefully after this post, the articles will become a little more informative, and also include a few code snippets. Who doesn't love code snippets?
+
+```java
+//TODO: come up with awesome running code snippets
+```
