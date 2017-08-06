@@ -15,9 +15,10 @@ At work, we use [SaltStack](https://saltstack.com/) to perform small tasks acros
 
 Docker inspect supports formatting its output using [Golang templates](https://golang.org/pkg/text/template/). It is a little tricky to work with if you have never used it, but there is plenty of documentation on it and it is pretty powerful. After a little struggling, some tears, then golang hatred, then back to golang love, I finally ended up with this:
 
-```
-docker inspect --format '{{.Name}},{{.Created}},{{.Config.Image}},{{if and (.Config) (.Config.Env) (gt (len .Config.Env) 2)}}{{index .Config.Env 2}}{{end}}' \$(docker ps -q)
-```
+
+
+>docker inspect --format '{\{\.Name\}\},{\{\.Created}\},{\{\.Config.Image}\},{\{if and (\.Config) (\.Config.Env) (gt (len \.Config.Env) 2)}\}{\{index \.Config.Env 2}\}{\{end}\}' \$(docker ps -q)
+
 
 Here is a snippet of what the output of that command is:
 

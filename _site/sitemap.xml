@@ -5,22 +5,13 @@
     <description>My Personal Stack Problems</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 05 Aug 2017 17:19:38 -0700</pubDate>
-    <lastBuildDate>Sat, 05 Aug 2017 17:19:38 -0700</lastBuildDate>
+    <pubDate>Sun, 06 Aug 2017 08:12:01 -0700</pubDate>
+    <lastBuildDate>Sun, 06 Aug 2017 08:12:01 -0700</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
-        <title>React Web App Part 1</title>
-        <description>&lt;p&gt;Over the years, I’ve worked on a handful of React web apps that have made it into production. The React app I am currently focusing all of my professional time on is easily the biggest and most complicated. We inherited it from another company and it was already fully built out with frameworks chosen and design decisions made. On one hand, this is good because it allowed us to dive right in and start adding the new features that we wanted. On the other hand, we are stuck with their frameworks/spaghetti code.&lt;/p&gt;
-
-&lt;p&gt;No matter how many projects you have worked on, it always seems to be a challenge to start a new project from scratch. Usually I end up spending most of my time troubleshooting weird build issues and before I know it, my Saturday is over and all I have is a web app that displays “Hello, Dave”.&lt;/p&gt;
-
-&lt;p&gt;It seems that recently most languages/frameworks understand that this is an issue and are doing a better job at creating tools to get you on your way developing something awesome. For React, that tool is &lt;a href=&quot;https://github.com/facebookincubator/create-react-app&quot;&gt;create-react-app&lt;/a&gt;. You can install it with npm, navigate to a directory, and then give it a name and it will generate everything you need to stub out an application and have it running in a browser. The README in the repo is very helpful.&lt;/p&gt;
-
-&lt;p&gt;Over the next few posts, I am going to demonstrate how I used create-react-app, the &lt;a href=&quot;https://expressjs.com/en/starter/generator.html&quot;&gt;Express Application generator&lt;/a&gt;, Docker, and Salt to quickly build a web app that keeps track of all of the versions of the microservices that we have running at our company.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-idea&quot;&gt;The Idea&lt;/h3&gt;
-&lt;p&gt;The problem that we were facing was that we had many different servers, each running a few different php microservices (most running in Docker containers), and we had no way of knowing which version of each application was in each environment. This made it difficult to test and troubleshoot issues because project A v1.5.1 depended on project B v1.0.1 and project B depended on project C v2.2.1, and so on. Multiple that by 20 projects across 3 environments, and you quickly run into a management nightmare. Now, I know that right now many of you are already rattling off a thousand different management tools that can be used to deploy applications, keep track of versions, poop unicorns, monitor CPU usage, etc, but my company doesn’t use that tool, they don’t want to pay for it, and they don’t want to invest anyone’s time into figuring out how it works.&lt;/p&gt;
+        <title>SaltStack + Docker</title>
+        <description>&lt;p&gt;Recently, we were continuously running into issue because we could not easily determine the versions of the applications that we had deployed to our non-production environments. The problem that we were facing was that we had many different servers, each running a few different php microservices (most running in Docker containers), and we had no way of knowing which version of each application was in each environment. This made it difficult to test and troubleshoot issues because project A v1.5.1 depended on project B v1.0.1 and project B depended on project C v2.2.1, and so on. Multiple that by 20 projects across 3 environments, and you quickly run into a management nightmare. Now, I know that right now many of you are already rattling off a thousand different management tools that can be used to deploy applications, keep track of versions, poop unicorns, monitor CPU usage, etc, but my company doesn’t use that tool, they don’t want to pay for it, and they don’t want to invest anyone’s time into figuring out how it works.&lt;/p&gt;
 
 &lt;p&gt;This is where I come in. Given one to two business days with constant interruptions, I wanted to build a web app that would display all of the versions, of all of the applications, across all environments.&lt;/p&gt;
 
@@ -29,28 +20,28 @@
 
 &lt;p&gt;Docker inspect supports formatting its output using &lt;a href=&quot;https://golang.org/pkg/text/template/&quot;&gt;Golang templates&lt;/a&gt;. It is a little tricky to work with if you have never used it, but there is plenty of documentation on it and it is pretty powerful. After a little struggling, some tears, then golang hatred, then back to golang love, I finally ended up with this:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker inspect --format ',,,' \$(docker ps -q)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;docker inspect –format ‘{{.Name}},{{.Created}},{{.Config.Image}},{{if and (.Config) (.Config.Env) (gt (len .Config.Env) 2)}}{{index .Config.Env 2}}{{end}}’ $(docker ps -q)&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;Here is a snippet of what the output of that command is:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;HOSTNAME42:
-    /app1_apache_1,2017-07-05T20:56:01.923093619Z,registry.dev.whillus.local/positions:v0.0.19-rc,GIT_COMMIT=3cfcaf88803a6ed455a69aee63c3a0bc59ff906b
-    /app2_apache_1,2017-07-05T18:12:52.758540195Z,registry.dev.whillus.local/sessions:v0.0.6-rc,GIT_COMMIT=08728dc27a1ca1a7be1777811fd118bbd3e17411
-    /app2_redis_1,2017-07-05T18:12:49.308514157Z,registry.dev.whillus.local/redis:3.2-alpine,REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-3.2.4.tar.gz
-    /app3_apache_1,2017-06-30T16:19:59.417421069Z,registry.dev.whillus.local/accounts:v0.0.15-rc,GIT_COMMIT=83f53df7348a41f28d142750bf817850ef475974
-    /proxy,2017-06-19T20:56:44.896440122Z,registry.dev.whillus.local/apache:0.0.22-php7-local,
-    /consul_agent,2017-03-13T23:19:06.908757417Z,registry.dev.whillus.local/consul:0.7.5,DOCKER_BASE_VERSION=0.0.4
+    /app1_apache_1,2017-07-05T20:56:01.923093619Z,registry.local/positions:v0.0.19-rc,GIT_COMMIT=3cfcaf88803a6ed455a69aee63c3a0bc59ff906b
+    /app2_apache_1,2017-07-05T18:12:52.758540195Z,registry.local/sessions:v0.0.6-rc,GIT_COMMIT=08728dc27a1ca1a7be1777811fd118bbd3e17411
+    /app2_redis_1,2017-07-05T18:12:49.308514157Z,registry.local/redis:3.2-alpine,REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-3.2.4.tar.gz
+    /app3_apache_1,2017-06-30T16:19:59.417421069Z,registry.local/accounts:v0.0.15-rc,GIT_COMMIT=83f53df7348a41f28d142750bf817850ef475974
+    /proxy,2017-06-19T20:56:44.896440122Z,registry.local/apache:0.0.22-php7-local,
+    /consul_agent,2017-03-13T23:19:06.908757417Z,registry.local/consul:0.7.5,DOCKER_BASE_VERSION=0.0.4
 HOSTNAME51:
-    /proxy,2017-06-30T15:44:42.588490143Z,registry.dev.whillus.local/apache:0.0.22-php7-local,
-    /consul_agent,2017-03-13T23:19:06.908757417Z,registry.dev.whillus.local/consul:0.7.5,DOCKER_BASE_VERSION=0.0.4
+    /proxy,2017-06-30T15:44:42.588490143Z,registry.local/apache:0.0.22-php7-local,
+    /consul_agent,2017-03-13T23:19:06.908757417Z,registry.local/consul:0.7.5,DOCKER_BASE_VERSION=0.0.4
 HOSTNAME45:
-    /app4_apache_1,2017-07-05T17:19:37.923555027Z,registry.dev.whillus.local/configurations:v0.0.15-rc,GIT_COMMIT=1a50020a133acce981cc0361375f57cb47f016fc
-    /app4_redis_1,2017-07-05T17:19:34.68029824Z,registry.dev.whillus.local/redis:3.2-alpine,REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-3.2.4.tar.gz
-    /app1_apache_1,2017-06-30T22:22:58.181982066Z,registry.dev.whillus.local/messages:v0.0.5-rc,GIT_COMMIT=289c14f1fc84f4ece3e008225ce56ed03357c4a5
-    /proxy,2017-06-19T20:57:08.976574148Z,registry.dev.whillus.local/apache:0.0.22-php7-local,
-    /consul_agent,2017-03-13T23:19:06.908757417Z,registry.dev.whillus.local/consul:0.7.5,DOCKER_BASE_VERSION=0.0.4
+    /app4_apache_1,2017-07-05T17:19:37.923555027Z,registry.local/configurations:v0.0.15-rc,GIT_COMMIT=1a50020a133acce981cc0361375f57cb47f016fc
+    /app4_redis_1,2017-07-05T17:19:34.68029824Z,registry.local/redis:3.2-alpine,REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-3.2.4.tar.gz
+    /app1_apache_1,2017-06-30T22:22:58.181982066Z,registry.local/messages:v0.0.5-rc,GIT_COMMIT=289c14f1fc84f4ece3e008225ce56ed03357c4a5
+    /proxy,2017-06-19T20:57:08.976574148Z,registry.local/apache:0.0.22-php7-local,
+    /consul_agent,2017-03-13T23:19:06.908757417Z,registry.local/consul:0.7.5,DOCKER_BASE_VERSION=0.0.4
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -59,18 +50,14 @@ HOSTNAME45:
 &lt;p&gt;Next you will notice that the application versions are grouped by hostname. This is done by Salt. Although helpful, later on it will make the parsing of this file just a little bit harder.&lt;/p&gt;
 
 &lt;p&gt;Ok, now we have our version information in a single file, what are we going to do with it? In the next post, I will talk about how I created a nodejs application that accepts the file, saves it to the database, and servers it via RESTful endpoints.&lt;/p&gt;
-
-&lt;p&gt;Sorry that the title of this post is a little misleading since we didn’t actually build a React web app at all. But, Rome wasn’t built in a day, and neither is a web application. I usually prefer to work from the bottom up to the top, which means that the UI is usually done last. If that upsets you, remember that there wouldn’t even be a UI without data and services to serve that data. The backend has to come first. So there.&lt;/p&gt;
 </description>
         <pubDate>Sat, 05 Aug 2017 00:00:00 -0700</pubDate>
-        <link>http://localhost:4000/2017/08/05/React-Web-App-Part-1.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/08/05/React-Web-App-Part-1.html</guid>
+        <link>http://localhost:4000/2017/08/05/SaltStack-plus-Docker.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/08/05/SaltStack-plus-Docker.html</guid>
         
-        <category>web-development</category>
+        <category>saltstack</category>
         
-        <category>react</category>
-        
-        <category>nodejs</category>
+        <category>docker</category>
         
         
       </item>
