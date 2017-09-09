@@ -37,7 +37,7 @@ urls:
     - text: RSS
       url: /feed.xml
     - text: Tags
-      url: /tags/
+      url: /tags
 
 url: "https://dmcnavish.github.io"
 baseurl: ""
