@@ -5,8 +5,8 @@
     <description>My Personal Stack Problems</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 11 Oct 2017 19:16:07 -0700</pubDate>
-    <lastBuildDate>Wed, 11 Oct 2017 19:16:07 -0700</lastBuildDate>
+    <pubDate>Wed, 11 Oct 2017 19:19:09 -0700</pubDate>
+    <lastBuildDate>Wed, 11 Oct 2017 19:19:09 -0700</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
@@ -33,9 +33,9 @@
 
 &lt;p&gt;You can find the original snippet &lt;a href=&quot;https://gist.github.com/dmcnavish/f88cd002b01f732ae27ed1b21afd674d&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 10 Sep 2017 00:00:00 -0700</pubDate>
-        <link>http://localhost:4000/2017/09/10/updating-image-create-dates.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/09/10/updating-image-create-dates.html</guid>
+        <pubDate>Wed, 11 Oct 2017 00:00:00 -0700</pubDate>
+        <link>http://localhost:4000/2017/10/11/updating-image-create-dates.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/10/11/updating-image-create-dates.html</guid>
         
         <category>shell</category>
         
